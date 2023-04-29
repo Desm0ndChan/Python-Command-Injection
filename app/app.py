@@ -13,6 +13,9 @@ def ping():
         host = request.form.get("host")
         if not host:
             return "host name is required", 400
+        bad_chars = ['"', "'", '/', '$', ';', '|', '&']
+        if any(char in host for char in bad_chars):
+                return "invalid host name", 400
         command = "ping -c 1 "+ host
         output = subprocess.check_output(command, shell=True, stderr=subprocess.STDOUT)
         return output, 200
